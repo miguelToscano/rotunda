@@ -2,7 +2,8 @@ const errors = require('../../services/errors');
 
 const errorStatusCode = {
     [errors.INTERNAL_ERROR]: 500,
-    [errors.URL_NOT_FOUND]: 404,
+    [errors.URL_SCHEMA_NOT_FOUND]: 404,
+    [errors.INVALID_URL_SCHEMA]: 400,
     [errors.INVALID_URL]: 400,
 }
 

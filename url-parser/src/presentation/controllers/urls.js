@@ -1,21 +1,21 @@
 const urlServices = require('../../services/urls.js');
 
-const setUrl = async (req, res, next) => {
+const setUrlSchema = async (req, res, next) => {
     try {
         console.log(req);
         console.log(req.body);
-        const newUrl = req.body.url;
-        await urlServices.setUrl(newUrl);
+        const newUrlSchema = req.body.url_schema;
+        await urlServices.setUrlSchema(newUrlSchema);
         return res.status(201).send({ message: "success" })
     } catch (error) {
         next(error);
     }
 };
 
-const getUrl = async (req, res, next) => {
+const getUrlSchema = async (req, res, next) => {
     try {
-        const url = await urlServices.getUrl();
-        return res.status(200).send({ url });
+        const urlSchema = await urlServices.getUrlSchema();
+        return res.status(200).send({ url_schema: urlSchema });
     } catch (error) {
         next(error);
     }
@@ -31,7 +31,7 @@ const parseUrl = async (req, res, next) => {
 };
 
 module.exports = {
-    setUrl,
-    getUrl,
-    parseUrl
+    setUrlSchema,
+    getUrlSchema,
+    parseUrl,
 };

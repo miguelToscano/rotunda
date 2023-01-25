@@ -1,23 +1,35 @@
 const _ = require('lodash');
-const urlsRepository = require('../infrastructure/urlsMemoryDatabase');
+const urlSchemaRepository = require('../infrastructure/urlSchemaMemoryDatabase');
 const errors = require('./errors');
 
-const setUrl = async (url) => {
+const validateUrlSchema = (url) => {
     try {
-        await urlsRepository.setUrl(url);
-        return url;
+        if (url.length === 0 || url[0] !== "/") {
+            throw errors.createError(errors.INVALID_URL_SCHEMA);
+        }
     } catch (error) {
         console.log(error);
         throw error;
     }
 };
 
-const getUrl = async () => {
+const setUrlSchema = async (urlSchema) => {
     try {
-        const url = await urlsRepository.getUrl();
+        validateUrlSchema(urlSchema);
+        await urlSchemaRepository.setUrlSchema(urlSchema);
+        return urlSchema;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const getUrlSchema = async () => {
+    try {
+        const url = await urlSchemaRepository.getUrlSchema();
 
         if (!url) {
-            throw errors.createError(errors.URL_NOT_FOUND);
+            throw errors.createError(errors.URL_SCHEMA_NOT_FOUND);
         }
 
         return url;
@@ -29,20 +41,35 @@ const getUrl = async () => {
 
 const parseUrl = async (url) => {
     try {
-        const response = {};
-    
-        let splitUrl = url.split('/');
-        splitUrl = _.slice(splitUrl, 1, splitUrl.length);
+        const urlSchema = await urlSchemaRepository.getUrlSchema();
         
-        const keyValueChunks = _.chunk(splitUrl, 2);
-    
-        keyValueChunks.forEach(keyValueChunk => {
-            if (keyValueChunk.length !== 2) {
-                throw errors.createError(errors.types.INVALID_URL);
-            }
+        if (!urlSchema) {
+            throw errors.createError(errors.URL_SCHEMA_NOT_FOUND);
+        }
 
-            response[keyValueChunk[0]] = keyValueChunk.length == 2 ? keyValueChunk[1] : null;
-        });
+        const response = {};
+
+        let splitUrlSchema = urlSchema.split("/");
+        splitUrlSchema = _.slice(splitUrlSchema, 1, splitUrlSchema.length);
+
+        let splitUrl = url.split("/");
+        splitUrl = splitUrl.split("?")[0];
+        splitUrl = _.slice(splitUrl, 1, splitUrl.length);
+
+        let queryParams = url.split("?")[1];
+        console.log(queryParams);
+
+        if (splitUrlSchema.length !== splitUrl.length) {
+            throw errors.createError(errors.INVALID_URL);
+        }
+
+        for (let i = 0; i < splitUrlSchema.length; i++) {
+            if (splitUrlSchema[i][0] === ":") {
+                response[splitUrlSchema[i].split(":")[1]] = splitUrl[i];
+            }
+        }
+
+        console.log(response);
         
         return response;
     } catch (error) {
@@ -52,7 +79,7 @@ const parseUrl = async (url) => {
 };
 
 module.exports = {
-    setUrl,
-    getUrl,
+    setUrlSchema,
+    getUrlSchema,
     parseUrl,
 };

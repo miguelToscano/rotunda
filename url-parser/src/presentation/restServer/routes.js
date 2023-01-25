@@ -1,9 +1,9 @@
 const urlsControllers = require('../controllers/urls');
 
 const bind = (app) => {
-    app.get("/url", urlsControllers.getUrl);
-    app.post("/url", urlsControllers.setUrl);
-    app.get('/*', urlsControllers.parseUrl);
+    app.get("/url_schema", urlsControllers.getUrlSchema);
+    app.post("/url_schema", urlsControllers.setUrlSchema);
+    app.post('/*', urlsControllers.parseUrl);
 };
 
 module.exports = {
