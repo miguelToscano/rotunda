@@ -21,7 +21,7 @@ function logError(error) {
             notification_sent: foundError.notification_sent,
         };
 
-        if (updatedErrorObject.ocurrencies > OCURRENCIES_TRESHHOLD && 
+        if (updatedErrorObject.ocurrencies >= OCURRENCIES_TRESHHOLD && 
         updatedErrorObject.notification_sent === false) {
             sendNotification();
             updatedErrorObject.notification_sent = true;
