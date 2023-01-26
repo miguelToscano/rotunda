@@ -21,5 +21,5 @@ Parses the provided url according to the schema
 Postman collection: `https://github.com/miguelToscano/rotunda.git`
 
 ## Architecture
-I decided to use a `Layered Architecture` due to the simplicity of the domain. It organized the codebase into horizontal layers, with each layer addressing one of the following technical concerns: interation with the consumers (presentation), implementing business logic (services), and persisting the data (infrastructure). 
+I decided to use a `Layered Architecture` due to the simplicity of the domain. It organized the codebase into horizontal layers, with each layer addressing one of the following technical concerns: interation with the consumers (`presentation`), implementing business logic (`services`), and persisting the data (`infrastructure`). 
 For the business logic i used a `Transactional Script Pattern`. This pattern is well adapted to the most straightforward problem domains in which the business logic resembles simple procedural operations.
