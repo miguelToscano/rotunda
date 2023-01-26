@@ -1,0 +1,13 @@
+const QUERY_PARAM_PREFIX = "?";
+const QUERY_PARAM_DELIMITER = "&"
+const QUERY_PARAM_SPLIT = "=";
+const PARAM_PREFIX = ":";
+const PARAM_SPLIT = "/";
+
+module.exports = {
+    QUERY_PARAM_DELIMITER,
+    QUERY_PARAM_PREFIX,
+    QUERY_PARAM_SPLIT,
+    PARAM_PREFIX,
+    PARAM_SPLIT,
+}

@@ -1,9 +1,12 @@
-const _ = require('lodash');
-const urlSchemaRepository = require('../infrastructure/urlSchemaMemoryDatabase');
-const errors = require('./errors');
+const _ = require("lodash");
+const urlSchemaRepository = require("../infrastructure/urlSchemaMemoryDatabase");
+const errors = require("./errors");
+const constants = require("./constants")
+
+const parseValue = (stringValue) => isNaN(stringValue) ? stringValue : parseInt(stringValue);
 
 const getParams = (url) => {
-    let splitUrl = url.split("/");
+    let splitUrl = url.split(constants.PARAM_SPLIT);
     splitUrl = _.slice(splitUrl, 1, splitUrl.length);
     return splitUrl;
 };
@@ -12,8 +15,8 @@ const parseParams = (schema, params) => {
     const response = {};
 
     for (let i = 0; i < schema.length; i++) {
-        if (schema[i][0] === ":") {
-            response[schema[i].split(":")[1]] = params[i];
+        if (schema[i][0] === constants.PARAM_PREFIX) {
+            response[schema[i].split(constants.PARAM_PREFIX)[1]] = parseValue(params[i]);
         }
     }
 
@@ -24,17 +27,17 @@ const parseQueryParams = (queryParams) => {
     const response = {};
 
     if (queryParams) {
-        let queryParamsSplit = queryParams.split("&");
+        let queryParamsSplit = queryParams.split(constants.QUERY_PARAM_DELIMITER);
         queryParamsSplit.forEach(splitQueryParam => {
-            const splitParams = splitQueryParam.split("=");
-            response[splitParams[0]] = splitParams[1];
+            const splitParams = splitQueryParam.split(constants.QUERY_PARAM_SPLIT);
+            response[splitParams[0]] = parseValue(splitParams[1]);
         });
     }
 
     return response;
 };
 
-const getQueryParams = (url) => url.includes("?") ? url.split("?")[1] : null;
+const getQueryParams = (url) => url.includes(constants.QUERY_PARAM_PREFIX) ? url.split(constants.QUERY_PARAM_PREFIX)[1] : null;
 
 const parseUrl = async (url) => {
     try {
@@ -48,7 +51,7 @@ const parseUrl = async (url) => {
             throw errors.createError(errors.URL_SCHEMA_NOT_FOUND);
         }
 
-        let splitUrlSchema = urlSchema.split("/");
+        let splitUrlSchema = urlSchema.split(constants.PARAM_SPLIT);
         splitUrlSchema = _.slice(splitUrlSchema, 1, splitUrlSchema.length);
 
         let params = getParams(url);
@@ -56,7 +59,7 @@ const parseUrl = async (url) => {
 
         if (queryParams) {
             let lastParam = params[params.length - 1];
-            lastParam = lastParam.split("?")[0];
+            lastParam = lastParam.split(constants.QUERY_PARAM_PREFIX)[0];
             params[params.length - 1] = lastParam;
         }
 
