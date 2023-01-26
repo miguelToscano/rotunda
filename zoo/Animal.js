@@ -3,7 +3,7 @@ class Animal {
         this.animalSound = animalSound;
     }
 
-    speak(message) {
+    speak(message = "") {
         const newMessage = [];
         const splitMessage = message.split(" ");
 
