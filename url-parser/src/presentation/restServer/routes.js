@@ -1,9 +1,9 @@
-const urlsControllers = require('../controllers/urls');
+const urlControllers = require('../controllers');
 
 const bind = (app) => {
-    app.get("/urls/schema", urlsControllers.getUrlSchema);
-    app.post("/urls/schema", urlsControllers.setUrlSchema);
-    app.post('/urls/parse', urlsControllers.parseUrl);
+    app.get("/urls/schema", urlControllers.getUrlSchema);
+    app.post("/urls/schema", urlControllers.setUrlSchema);
+    app.post('/urls/parse', urlControllers.parseUrl);
 };
 
 module.exports = {
