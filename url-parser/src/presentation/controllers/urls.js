@@ -2,8 +2,6 @@ const urlServices = require('../../services/urls.js');
 
 const setUrlSchema = async (req, res, next) => {
     try {
-        console.log(req);
-        console.log(req.body);
         const newUrlSchema = req.body.url_schema;
         await urlServices.setUrlSchema(newUrlSchema);
         return res.status(201).send({ message: "success" })
@@ -23,7 +21,8 @@ const getUrlSchema = async (req, res, next) => {
 
 const parseUrl = async (req, res, next) => {
     try {
-        const parsedUrl = await urlServices.parseUrl(req.originalUrl);
+        const { url } = req.body;
+        const parsedUrl = await urlServices.parseUrl(url);
         return res.status(200).send({ ...parsedUrl });
     } catch (error) {
         next(error);
